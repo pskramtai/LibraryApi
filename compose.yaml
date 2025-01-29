@@ -1,0 +1,6 @@
+﻿services:
+  api.host:
+    image: api.host
+    build:
+      context: .
+      dockerfile: Api.Host/Dockerfile
