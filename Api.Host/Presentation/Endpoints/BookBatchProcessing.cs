@@ -4,7 +4,6 @@ using Api.Host.Domain.Exceptions;
 using Api.Host.Presentation.Filters;
 using Api.Host.Presentation.Mappers;
 using Api.Host.Presentation.Requests;
-using Api.Host.Presentation.Responses;
 
 namespace Api.Host.Presentation.Endpoints;
 
@@ -27,7 +26,9 @@ public static class BookBatchProcessing
         {
             var results = await service.ExecuteBatchAsync(new BatchOperationDetails(commands));
 
-            return Results.Ok(new BatchOperationResponse(results));
+            var responses = results.Select(x => x.ToResponse()).ToList();
+            
+            return Results.Ok(responses);
         }
         catch (ConflictingOperationsException e)
         {

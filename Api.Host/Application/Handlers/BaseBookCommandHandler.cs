@@ -9,14 +9,18 @@ public abstract class BaseBookCommandHandler<TCommand, TResponse> : IRequestHand
 {
     public async Task<TResponse> Handle(TCommand request, CancellationToken cancellationToken)
     {
+        BookCommandResult result;
+
         try
         {
-            return await PerformOperationAsync(request);
+            result = await PerformOperationAsync(request);
         }
         catch
         {
-            return (TResponse) new BookCommandResult(false);
+            result = new BookCommandResult(false);
         }
+        
+        return (TResponse) result;
     }
     
     protected abstract Task<TResponse> PerformOperationAsync(TCommand command);

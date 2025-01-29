@@ -3,8 +3,8 @@
 public record DeleteBookCommand
 (
     Guid Id
-) : IBookCommand<DeleteBookBookCommandResult>;
+) : IBookCommand<DeleteBookCommandResult>;
 
-public record DeleteBookBookCommandResult(
+public record DeleteBookCommandResult(
     bool Success
 ) : BookCommandResult(Success);
