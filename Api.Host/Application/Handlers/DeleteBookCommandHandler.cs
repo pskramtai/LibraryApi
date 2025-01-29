@@ -9,6 +9,6 @@ public class DeleteBookCommandHandler(IBookRepository bookRepository) : BaseBook
     {
         await bookRepository.DeleteBook(command.Id);
 
-        return new BookCommandResult(true);
+        return new DeleteBookCommandResult(true);
     }
 }
