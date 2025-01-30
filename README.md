@@ -26,3 +26,9 @@ dotnet ef database update --connection "Host=localhost;Port=5433;Database=main;U
 ### Note
 
 PostgreSQL is exposed on 5433 port in Docker container (as opposed to default 5432 port) to avoid conflicts with locally hosted db.
+
+## Launch locally
+
+- Start PostgreSQL instance on port 5432
+- Change directory to Api.Host and run `dotnet ef database update`
+- Launch Api.Host and Frontend.Host projects
