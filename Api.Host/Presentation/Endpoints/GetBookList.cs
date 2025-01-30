@@ -9,7 +9,8 @@ public static class GetBookList
     public static WebApplication RegisterGetBookListEndpoint(this WebApplication app)
     {
         app
-            .MapGet("/books/", Handler);
+            .MapGet("/books/", Handler)
+            .RequireAuthorization();
 
         return app;
     }
