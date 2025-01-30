@@ -8,5 +8,5 @@ public interface IBookApiClient
     Task<IReadOnlyCollection<BookResponse>> GetBookList();
     
     [Post("/books/batch")]
-    Task<IReadOnlyCollection<BookOperationResponse>> SendBatch(IEnumerable<BatchOperationRequest> requests);
+    Task<IReadOnlyCollection<BookOperationResponse>> SendBatch(IEnumerable<BookOperationRequest> requests);
 }

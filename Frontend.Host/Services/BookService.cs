@@ -7,7 +7,7 @@ public interface IBookService
 {
     Task<IReadOnlyCollection<Book>> GetAllBooks();
 
-    Task<(bool Created, bool Updated, bool Deleted)> SendBatch
+    Task<(OperationResult Created, OperationResult Updated, OperationResult Deleted)> SendBatch
     (
         Book? bookToCreate,
         Book? bookToUpdate,
@@ -22,14 +22,14 @@ public class BookService(IBookApiClient client) : IBookService
         return (await client.GetBookList()).Select(x => x.ToModel()).ToList();
     }
 
-    public async Task<(bool Created, bool Updated, bool Deleted)> SendBatch
+    public async Task<(OperationResult Created, OperationResult Updated, OperationResult Deleted)> SendBatch
     (
         Book? bookToCreate,
         Book? bookToUpdate,
         Book? bookToDelete
     )
     {
-        var requests = new List<BatchOperationRequest?>
+        var requests = new List<BookOperationRequest?>
         {
             CreateRequest(bookToCreate),
             UpdateRequest(bookToUpdate),
@@ -40,67 +40,67 @@ public class BookService(IBookApiClient client) : IBookService
 
         var responses = (await client.SendBatch(requests!)).ToList();
 
-        var updatedBook = false;
-        var createdBook = false;
-        var isDeleted = false;
+        OperationResult updatedResult = null!;
+        OperationResult createdResult = null!;
+        OperationResult deletedResult = null!;
 
         for (int i = 0; i < responses.Count; i++)
         {
             var response = responses[i];
 
-            if (requests[i]!.CreateDetails != null && response.Success)
+            if (requests[i]!.CreateDetails is not null)
             {
-                createdBook = true;
+                createdResult = new OperationResult(response.Success, response.ErrorMessage);
             }
-            else if (requests[i]!.ModifyDetails != null && response.Success)
+            else if (requests[i]!.ModifyDetails is not null)
             {
-                updatedBook = true;
+                updatedResult =  new OperationResult(response.Success, response.ErrorMessage);
             }
-            else if (requests[i]!.DeleteDetails != null && response.Success)
+            else if (requests[i]!.DeleteDetails is not null)
             {
-                isDeleted = true;
+                deletedResult = new OperationResult(response.Success, response.ErrorMessage);
             }
         }
 
-        return (createdBook, updatedBook, isDeleted);
+        return (createdResult, updatedResult, deletedResult);
     }
 
-    private BatchOperationRequest? CreateRequest(Book? bookToCreate)
+    private BookOperationRequest? CreateRequest(Book? bookToCreate)
     {
         if (bookToCreate == null)
         {
             return null;
         }
 
-        return new BatchOperationRequest(
+        return new BookOperationRequest(
             CreateDetails: new CreateBookRequest(bookToCreate.Title, bookToCreate.Author, bookToCreate.ReleaseDate),
             null,
             null
         );
     }
 
-    private BatchOperationRequest? UpdateRequest(Book? bookToUpdate)
+    private BookOperationRequest? UpdateRequest(Book? bookToUpdate)
     {
         if (bookToUpdate == null)
         {
             return null;
         }
 
-        return new BatchOperationRequest(
+        return new BookOperationRequest(
             null,
             new ModifyBookRequest(bookToUpdate.Id, bookToUpdate.Title, bookToUpdate.Author, bookToUpdate.ReleaseDate),
             null
         );
     }
 
-    private BatchOperationRequest? DeleteRequest(Book? bookToDelete)
+    private BookOperationRequest? DeleteRequest(Book? bookToDelete)
     {
         if (bookToDelete == null)
         {
             return null;
         }
 
-        return new BatchOperationRequest(
+        return new BookOperationRequest(
             null,
             null,
             new DeleteBookRequest(bookToDelete.Id)

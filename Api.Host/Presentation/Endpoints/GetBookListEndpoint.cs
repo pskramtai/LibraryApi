@@ -4,7 +4,7 @@ using Api.Host.Presentation.Responses;
 
 namespace Api.Host.Presentation.Endpoints;
 
-public static class GetBookList
+public static class GetBookListEndpoint
 {
     public static WebApplication RegisterGetBookListEndpoint(this WebApplication app)
     {

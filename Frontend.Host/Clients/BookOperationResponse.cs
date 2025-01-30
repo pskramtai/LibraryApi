@@ -3,5 +3,6 @@
 public record BookOperationResponse
 (
     bool Success,
-    BookResponse? Result
+    BookResponse? Result,
+    string? ErrorMessage
 );

@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Api.Host.Presentation.Validators;
 
-public class BatchOperationRequestValidator : AbstractValidator<BatchOperationRequest>
+public class BookOperationRequestValidator : AbstractValidator<BookOperationRequest>
 {
-    public BatchOperationRequestValidator(
+    public BookOperationRequestValidator(
         IValidator<CreateBookRequest> createBookRequestValidator,
         IValidator<ModifyBookRequest> modifyBookRequestValidator,
         IValidator<DeleteBookRequest> deleteBookRequestValidator
@@ -28,7 +28,7 @@ public class BatchOperationRequestValidator : AbstractValidator<BatchOperationRe
             .When(x => x.DeleteDetails is not null);
     }
 
-    private bool BeOfOneOperationType(BatchOperationRequest request)
+    private bool BeOfOneOperationType(BookOperationRequest request)
     {
         List<bool> properties =
         [

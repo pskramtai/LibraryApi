@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Api.Host.Presentation.Configuration;
 using Api.Host.Presentation.Endpoints;
+using Api.Host.Presentation.Filters;
 using Api.Host.Presentation.Middleware;
 using Microsoft.AspNetCore.Http.Json;
 
@@ -9,7 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddOpenApi()
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
+    .AddSwaggerGen(options =>
+    {
+        options.SchemaFilter<BookOperationRequestSchemaFilter>();
+    })
     .Configure<JsonOptions>(options =>
     {
         options.SerializerOptions.PropertyNameCaseInsensitive = true;

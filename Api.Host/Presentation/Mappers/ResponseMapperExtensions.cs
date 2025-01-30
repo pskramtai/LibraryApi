@@ -18,7 +18,7 @@ public static class ResponseMapperExtensions
     {
         if (!result.Success)
         {
-            return new BookOperationResponse(Success: false, Result: null);
+            return new BookOperationResponse(Success: false, Result: null, ErrorMessage: result.ErrorMessage);
         }
         
         return result switch

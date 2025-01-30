@@ -5,7 +5,7 @@ namespace Api.Host.Presentation.Mappers;
 
 public static class RequestMapperExtensions
 {
-    public static IBookCommand<BookCommandResult> ToCommand(this BatchOperationRequest request)
+    public static IBookCommand<BookCommandResult> ToCommand(this BookOperationRequest request)
     {
         return request switch
         {
