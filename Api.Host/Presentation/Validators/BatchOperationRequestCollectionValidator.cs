@@ -3,10 +3,10 @@ using FluentValidation;
 
 namespace Api.Host.Presentation.Validators;
 
-public class BatchOperationRequestCollectionValidator : AbstractValidator<IReadOnlyCollection<BatchOperationRequest>>
+public class BatchOperationRequestCollectionValidator : AbstractValidator<IReadOnlyCollection<BookOperationRequest>>
 {
     public BatchOperationRequestCollectionValidator(
-        IValidator<BatchOperationRequest> batchOperationRequestValidator
+        IValidator<BookOperationRequest> batchOperationRequestValidator
     )
     {
         RuleForEach(x => x)

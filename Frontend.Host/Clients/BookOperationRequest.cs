@@ -1,6 +1,6 @@
 ﻿namespace Frontend.Host.Clients;
 
-public record BatchOperationRequest(
+public record BookOperationRequest(
     CreateBookRequest? CreateDetails,
     ModifyBookRequest? ModifyDetails,
     DeleteBookRequest? DeleteDetails

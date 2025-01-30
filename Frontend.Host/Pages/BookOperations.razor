@@ -121,7 +121,7 @@
     private string? _createFeedbackMessage;
     private string? _deleteFeedbackMessage;
 
-    private bool _submitted = false;
+    private bool _submitted;
 
     
     protected override void OnInitialized()
@@ -151,15 +151,15 @@
     {
         _submitted = true;
         
-        var (isUpdated, isCreated, isDeleted) = await BookService.SendBatch(
+        var (created, updated, deleted) = await BookService.SendBatch(
             bookToCreate: _bookToCreate, 
             bookToUpdate: _bookToEdit,
             bookToDelete: _bookToDelete
         );
         
-        _updateFeedbackMessage = isUpdated ? "Book was successfully updated." : "Failed updating book.";
-        _createFeedbackMessage = isCreated ? "Book was successfully created." : "Failed creating book.";
-        _deleteFeedbackMessage = isDeleted ? "Book was successfully deleted." : "Failed deleting book.";
+        _updateFeedbackMessage = updated.Success ? "Book was successfully updated." : updated.ErrorMessage;
+        _createFeedbackMessage = created.Success ? "Book was successfully created." : updated.ErrorMessage;
+        _deleteFeedbackMessage = deleted.Success ? "Book was successfully deleted." : deleted.ErrorMessage;
     }
 }
 

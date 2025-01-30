@@ -15,9 +15,13 @@ public abstract class BaseBookCommandHandler<TCommand, TResponse> : IRequestHand
         {
             result = await PerformOperationAsync(request);
         }
+        catch (KeyNotFoundException)
+        {
+            result = new BookCommandResult(false, "Book not found.");
+        }
         catch
         {
-            result = new BookCommandResult(false);
+            result = new BookCommandResult(false, "Unexpected error occured while performing operation.");
         }
         
         return (TResponse) result;

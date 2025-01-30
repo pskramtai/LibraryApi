@@ -7,18 +7,20 @@ using Api.Host.Presentation.Requests;
 
 namespace Api.Host.Presentation.Endpoints;
 
-public static class BookBatchProcessing
+public static class ProcessBookBatchEndpoint
 {
     public static WebApplication RegisterBookBatchProcessingEndpoint(this WebApplication app)
     {
         app
             .MapPost("/books/batch", Handler)
-            .AddEndpointFilter<ValidationFilter<IReadOnlyCollection<BatchOperationRequest>>>();
+            .AddEndpointFilter<ValidationFilter<IReadOnlyCollection<BookOperationRequest>>>()
+            .Produces(400)
+            .Produces(409);
 
         return app;
     }
 
-    private static async Task<IResult> Handler(IBookBatchService service, IReadOnlyCollection<BatchOperationRequest> request)
+    private static async Task<IResult> Handler(IBookBatchService service, IReadOnlyCollection<BookOperationRequest> request)
     {
         var commands = request.Select(x => x.ToCommand()).ToList();
 
