@@ -4,3 +4,32 @@
     build:
       context: .
       dockerfile: Api.Host/Dockerfile
+    ports:
+      - "5206:5206"
+    depends_on:
+      - postgres
+    environment:
+      - ConnectionStrings__DbConnectionString=Host=postgres;Port=5432;Database=main;Username=postgres;Password=postgres
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: main
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  frontend.host:
+    image: frontend.host
+    build:
+      context: .
+      dockerfile: Frontend.Host/Dockerfile
+    ports:
+     - "8080:80"
+    depends_on:
+     - api.host
+volumes:
+  postgres-data:
