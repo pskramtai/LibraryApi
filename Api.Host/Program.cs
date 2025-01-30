@@ -1,17 +1,10 @@
 using System.Text.Json.Serialization;
-using Api.Host.Application.Services;
-using Api.Host.Domain.Repositories;
-using Api.Host.Domain.Services;
-using Api.Host.Infrastructure;
-using Api.Host.Infrastructure.Repositories;
+using Api.Host.Presentation.Configuration;
 using Api.Host.Presentation.Endpoints;
 using Api.Host.Presentation.Middleware;
-using FluentValidation;
 using Microsoft.AspNetCore.Http.Json;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Services
     .AddOpenApi()
@@ -21,15 +14,11 @@ builder.Services
     {
         options.SerializerOptions.PropertyNameCaseInsensitive = true;
         options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    })
-    .AddValidatorsFromAssemblyContaining<Program>()
-    .AddScoped<IBookBatchService, BookBatchService>()
-    .AddScoped<IBookRepository, BookRepository>()
-    .AddScoped<IBookService, BookService>()
-    .AddSingleton<IBatchValidationService, BatchValidationService>()
-    .AddPooledDbContextFactory<BookDbContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnectionString")))
-    .AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+    });
+    
+builder.Services    
+    .ConfigureServices()
+    .ConfigureRepositories(builder.Configuration);
 
 builder.Services.AddLogging(cfg => cfg.AddConsole());
 
@@ -41,8 +30,13 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });
 
+builder.Services.ConfigureAuthentication();
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseCors("BlazorApp");
 
 if (app.Environment.IsDevelopment())
