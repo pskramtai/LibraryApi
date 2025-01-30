@@ -1,0 +1,100 @@
+﻿@page "/library"
+@using Frontend.Host.Models
+@using Frontend.Host.Services
+@inject IBookService BookService
+@inject StateContainer StateContainer
+@inject NavigationManager NavigationManager
+
+<PageTitle>Library</PageTitle>
+
+<h1>Library</h1>
+
+@if (_books == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Release date</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var book in _books)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.ReleaseDate</td>
+            </tr>
+        }
+        <button @onclick="SelectAndNavigate">Edit</button>
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Book>? _books;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _books = (await BookService.GetAllBooks()).ToList();
+    }
+
+    private void SelectAndNavigate()
+    {
+        var (bookToEdit, bookToDelete) = SelectRandomBooks();
+
+        var queryParams = new List<string>();
+
+        if (bookToEdit != null)
+        {
+            queryParams.Add($"bookToEdit={bookToEdit.Id}");
+        }
+
+        if (bookToDelete != null)
+        {
+            queryParams.Add($"bookToDelete={bookToDelete.Id}");
+        }
+
+        var queryString = string.Join("&", queryParams);
+
+        StateContainer.SetBooks(_books!);
+        NavigationManager.NavigateTo($"/BookOperations?{queryString}");
+    }
+    
+    private (Book? BookToUpdate, Book? BookToDelete) SelectRandomBooks()
+    {
+        if (_books is null)
+        {
+            return (null, null);
+        }
+        
+        if (_books.Count == 0)
+        {
+            return (null, null);
+        }
+
+        if (_books.Count == 1)
+        {
+            return (_books[0], null);
+        }
+        
+        var firstIndex = Random.Shared.Next(0, _books.Count);
+        
+        int secondIndex;
+
+        do
+        {
+            secondIndex = Random.Shared.Next(0, _books.Count);
+        } while (secondIndex == firstIndex);
+
+        return (_books[firstIndex], _books[secondIndex]);
+    }
+}

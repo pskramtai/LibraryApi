@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend.Host", "Frontend.Host\Frontend.Host.csproj", "{BB4B3C4D-EB5E-4281-92E4-2DBD2FB2E113}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,5 +19,9 @@ Global
 		{433270EF-21E2-4FEE-8A1E-1BB1339EF91B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{433270EF-21E2-4FEE-8A1E-1BB1339EF91B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{433270EF-21E2-4FEE-8A1E-1BB1339EF91B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB4B3C4D-EB5E-4281-92E4-2DBD2FB2E113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB4B3C4D-EB5E-4281-92E4-2DBD2FB2E113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB4B3C4D-EB5E-4281-92E4-2DBD2FB2E113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB4B3C4D-EB5E-4281-92E4-2DBD2FB2E113}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

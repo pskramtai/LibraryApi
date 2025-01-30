@@ -33,7 +33,17 @@ builder.Services
 
 builder.Services.AddLogging(cfg => cfg.AddConsole());
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("BlazorApp",
+        x => x.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 var app = builder.Build();
+
+app.UseCors("BlazorApp");
 
 if (app.Environment.IsDevelopment())
 {
